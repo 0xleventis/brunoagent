@@ -17,7 +17,6 @@ function App() {
         <Sidebar 
           activeTab={activeTab} 
           onTabChange={setActiveTab}
-          onToggleDarkMode={() => setDarkMode(!darkMode)}
         />
         <main className="content">
           {activeTab === 'signals' && (

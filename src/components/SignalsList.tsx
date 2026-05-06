@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useMemo } from 'react'
 import './SignalsList.css'
 import SignalCard from './SignalCard'
 
@@ -31,8 +31,6 @@ interface SignalsListProps {
 const generateMockSignals = (): Signal[] => {
   const solanaTokens = ['DBC', 'SOL', 'USDC', 'JTO', 'ORCA', 'RAY', 'COPE', 'BONK', 'GMT', 'PYTH', 'MANGO', 'SBR']
   const baseTokens = ['BASE', 'DEGEN', 'AERODROME', 'CBETH', 'USDBC', 'STARGATE']
-  const allTokens = [...solanaTokens, ...baseTokens]
-  
   const generateAddress = () => {
     return 'A' + Math.random().toString(36).substring(2, 44).toUpperCase()
   }
@@ -84,27 +82,20 @@ export default function SignalsList({
   sortBy, 
   onSortChange 
 }: SignalsListProps) {
-  const [signals, setSignals] = useState<Signal[]>([])
-  const [filteredSignals, setFilteredSignals] = useState<Signal[]>([])
+  const [signals, setSignals] = useState<Signal[]>(generateMockSignals())
 
-  useEffect(() => {
-    const mockSignals = generateMockSignals()
-    setSignals(mockSignals)
-  }, [])
-
-  useEffect(() => {
+  const filteredSignals = useMemo(() => {
     let filtered = [...signals]
 
-    // Apply sort filter
     if (sortBy === 'WHALE') {
       filtered = filtered.filter(s => s.whales > 0).sort((a, b) => b.whales - a.whales)
     } else if (sortBy === 'MOMENTUM') {
       filtered = filtered.sort((a, b) => b.buyPressure - a.buyPressure)
     } else if (sortBy === 'BLANK') {
-      filtered = filtered.filter(s => Math.random() > 0.5)
+      filtered = filtered.filter((_, index) => index % 2 === 0)
     }
 
-    setFilteredSignals(filtered)
+    return filtered
   }, [signals, sortBy])
 
   const timeframes = ['1H', '4H', '24H']

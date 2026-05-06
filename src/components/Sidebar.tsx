@@ -3,10 +3,9 @@ import './Sidebar.css'
 interface SidebarProps {
   activeTab: string
   onTabChange: (tab: string) => void
-  onToggleDarkMode: () => void
 }
 
-export default function Sidebar({ activeTab, onTabChange, onToggleDarkMode }: SidebarProps) {
+export default function Sidebar({ activeTab, onTabChange }: SidebarProps) {
   const tabs = [
     { id: 'signals', label: 'SIGNALS', icon: '📡' },
     { id: 'blank', label: 'BLANK', icon: '📄' },
